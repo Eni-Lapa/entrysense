@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: entrysense
+          POSTGRES_PASSWORD: entrysense
+          POSTGRES_DB: entrysense_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U entrysense"
+          --health-interval 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://entrysense:entrysense@localhost:5432/entrysense_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Migrations match the schema
+        run: |
+          npm run db:check
+          npx drizzle-kit generate
+          git diff --exit-code drizzle/
+      - run: npm run test:coverage
+      - name: Extraction eval (offline provider, fails below baseline)
+        run: npm run eval
+      - name: Committed eval results are up to date
+        run: git diff --exit-code eval/
+      - run: npm run build

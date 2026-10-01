@@ -1,0 +1,28 @@
+# Requests for the VS Code REST Client or JetBrains HTTP Client.
+@base = http://localhost:3000
+@key = dev-api-key-change-me
+
+### Create an entry
+POST {{base}}/entries
+X-API-Key: {{key}}
+Content-Type: application/json
+
+{ "text": "Yesterday I slept 6 hours, energy 8/10, sore throat and a cough. Felt okay." }
+
+### List entries
+GET {{base}}/entries?from=2026-09-01&to=2026-09-30&page=1&pageSize=20
+X-API-Key: {{key}}
+
+### Trends
+GET {{base}}/trends?from=2026-09-01&to=2026-09-30
+X-API-Key: {{key}}
+
+### Ask a question
+POST {{base}}/chat
+X-API-Key: {{key}}
+Content-Type: application/json
+
+{ "question": "When did I have a sore throat this month and how was my sleep?" }
+
+### Readiness
+GET {{base}}/ready

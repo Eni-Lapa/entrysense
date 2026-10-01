@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: entrysense
+      POSTGRES_PASSWORD: entrysense
+      POSTGRES_DB: entrysense
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U entrysense"]
+      interval: 5s
+      retries: 10
+
+  # Local trace viewer: docker compose --profile observability up -d
+  # UI on http://localhost:16686, OTLP/HTTP on :4318
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.21.0
+    profiles: [observability]
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+
+volumes:
+  pgdata:
