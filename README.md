@@ -1,5 +1,7 @@
 # EntrySense
 
+![CI](https://github.com/Eni-Lapa/entrysense/actions/workflows/ci.yml/badge.svg)
+
 A typed Express API that turns free-text health notes into validated records using LLM structured output, and answers questions about them through a bounded tool-calling loop. An eval suite with a committed baseline measures extraction accuracy, so a prompt change that makes extraction worse fails CI.
 
 ```text
@@ -8,6 +10,14 @@ POST /entries  "Yesterday I slept 6 hours, energy 8/10, sore throat and a cough.
 ```
 
 Node 22 · TypeScript (strict) · Express 5 · Zod 4 · Drizzle + PostgreSQL · Anthropic SDK · Langfuse · pino · Vitest
+
+<!-- Eni: edit this in your own voice -->
+
+## Why I built this
+
+I spent a year building the frontend of a platform for testing LLM applications, and I watched model output break interfaces in ways ordinary APIs never did. I wanted to understand the other side of that boundary: how to treat a model as an untrusted collaborator inside a typed service. EntrySense is that exercise. It uses the two patterns most AI features in real products rely on, structured extraction and tool calling, with the guardrails I would want in production: model output validated against the same schema as user input, a tool loop with a step budget, and an eval that fails CI when a prompt change makes extraction worse.
+
+I built it with an AI coding assistant, as most teams do now. The layering, the validate-and-retry design, the step budget and the tracing are my decisions, and every file was reviewed and changed by hand.
 
 ## Quick start
 
