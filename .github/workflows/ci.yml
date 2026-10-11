@@ -22,7 +22,7 @@ jobs:
           POSTGRES_DB: entrysense_test
         ports: ["5432:5432"]
         options: >-
-          --health-cmd "pg_isready -U entrysense"
+          --health-cmd "pg_isready -U entrysense -d entrysense_test"
           --health-interval 5s
           --health-retries 10
     env:
