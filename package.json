@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Typed Express API that turns free-text health notes into validated data with LLM structured outputs and answers questions through tool calling.",
+  "author": "Polikseni Kokali",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Eni-Lapa/entrysense.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.12"
