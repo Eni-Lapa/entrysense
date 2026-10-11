@@ -13,9 +13,11 @@ Node 22 · TypeScript (strict) · Express 5 · Zod 4 · Drizzle + PostgreSQL · 
 
 ## Why I built this
 
-I spent a year building the frontend of a platform for testing LLM applications, and I watched model output break interfaces in ways ordinary APIs never did. I wanted to understand the other side of that boundary: how to treat a model as an untrusted collaborator inside a typed service. EntrySense is that exercise. It uses the two patterns most AI features in real products rely on, structured extraction and tool calling, with the guardrails I would want in production: model output validated against the same schema as user input, a tool loop with a step budget, and an eval that fails CI when a prompt change makes extraction worse.
+For about a year my job was the frontend of ai+me, a platform for testing LLM apps. I saw a lot of model output up close, and the thing that stuck with me is how often it was almost right. A field missing, a number out of range, a symptom spelled a way nobody expected.
 
-I built it with an AI coding assistant, as most teams do now. The layering, the validate-and-retry design, the step budget and the tracing are my decisions, and every file was reviewed and changed by hand.
+So I wanted to build the other side of it myself: a small typed API where the model is treated like untrusted input, not like a trusted service. That's what EntrySense is. A note comes in, the model turns it into a record, the record goes through the same Zod schema a user's input would. If it fails, the model gets one chance to fix it, and after that the request is a 422.
+
+I used an AI coding assistant while building it, like most people do now. The structure, the validate-and-retry idea, the step budget and the tracing are my decisions, and I went through every file. If you open any of them, I can tell you why it looks the way it does.
 
 ## Quick start
 
