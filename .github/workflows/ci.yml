@@ -43,8 +43,19 @@ jobs:
           npx drizzle-kit generate
           git diff --exit-code drizzle/
       - run: npm run test:coverage
+      - run: npm run build
+
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - name: Extraction eval (offline provider, fails below baseline)
         run: npm run eval
       - name: Committed eval results are up to date
         run: git diff --exit-code eval/
-      - run: npm run build
